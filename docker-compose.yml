@@ -1,0 +1,29 @@
+version: '2.2.3'
+services:
+  sql_db:
+    image: mysql:8.2.0
+    platform: linux/amd64
+    container_name: sql_db
+    env_file: .env
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+      - 33060:33060
+  sql_app:
+    container_name: sql_app
+    # env_file: .env.docker
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/
+    volumes:
+      - ".:/var/www/html"
+volumes:
+    mysql:
